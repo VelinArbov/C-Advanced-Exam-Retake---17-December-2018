@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CSharp_Advanced_Exam_Retake__17_December_2018
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string input = Console.ReadLine();
+            Dictionary<string, Dictionary<string, double>> sportsCard = new Dictionary<string, Dictionary<string, double>>();
+            while ( input != "end")
+            {
+                if ( input.Contains("check"))
+                {
+                    string[] tokens1 = input.Split( );
+                    if ( sportsCard.ContainsKey(tokens1[1]))
+                    {
+                        Console.WriteLine($"{tokens1[1]} is available!");
+                        input = Console.ReadLine();
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{tokens1[1]} is not available!");
+                        input = Console.ReadLine();
+                    }
+                    continue;
+                }
+
+
+                string[] tokens = input.Split(" - ");
+                string cardName = tokens[0];
+                string sport = tokens[1];
+                double price = double.Parse(tokens[2]);
+                if (!sportsCard.ContainsKey(cardName))
+                {
+                    sportsCard[cardName] = new Dictionary<string, double>();
+                    sportsCard[cardName].Add(sport, price);
+                }
+                else
+                {
+                    if ( sportsCard[cardName].ContainsKey(sport))
+                    {
+                        sportsCard[cardName][sport] = price;
+                    }
+                    else
+                    {
+                        sportsCard[cardName].Add(sport, price);
+                    }
+
+
+                }
+
+
+
+                input = Console.ReadLine();
+            }
+
+            foreach (var item in sportsCard.OrderByDescending(x=> x.Value.Count))
+            {
+                Console.WriteLine($"{item.Key}:");
+                foreach (var sport in item.Value.OrderBy(x=> x.Key))
+                {
+                    Console.WriteLine($"  -{sport.Key} - {sport.Value:f2}");
+                }
+            }
+
+        }
+    }
+}
