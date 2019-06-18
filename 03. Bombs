@@ -1,0 +1,121 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace Multidimensional_Arrays
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int rows = int.Parse(Console.ReadLine());
+
+
+
+            int[][] matrix = new int[rows][];
+
+
+            for (int row = 0; row < rows; row++)
+            {
+                matrix[row] = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            }
+            string[] cordinats = Console.ReadLine().Split().ToArray();
+            for (int i = 0; i < cordinats.Length; i++)
+            {
+                string current = cordinats[i];
+
+                string[] tokens = current.Split(',');
+                int bombRow = int.Parse(tokens[0]);
+                int bombCol = int.Parse(tokens[1]);
+
+                int bombPower = matrix[bombRow][bombCol];
+                if (bombPower < 0)
+                {
+                    continue;
+                }
+
+                if (IsMatrix(bombRow - 1, bombCol - 1, matrix.Length) && matrix[bombRow - 1][bombCol - 1] > 0)
+                {
+                    matrix[bombRow - 1][bombCol - 1] -= bombPower;
+                   
+                        //Console.WriteLine(string.Join(" ", matrix[bombRow - 1][bombCol - 1]));
+                    
+                }
+                if (IsMatrix(bombRow - 1, bombCol, matrix.Length) && matrix[bombRow - 1][bombCol] > 0)
+                {
+                    matrix[bombRow - 1][bombCol] -= bombPower;
+                  //  Console.WriteLine(string.Join(" ", matrix[bombRow -1][bombCol]));
+                }
+                if (IsMatrix(bombRow - 1, bombCol + 1, matrix.Length) && matrix[bombRow - 1][bombCol + 1] > 0)
+                {
+                    matrix[bombRow - 1][bombCol + 1] -= bombPower;
+                 //   Console.WriteLine(string.Join(" ", matrix[bombRow - 1][bombCol + 1]));
+                }
+                if (IsMatrix(bombRow, bombCol - 1, matrix.Length) && matrix[bombRow][bombCol - 1] > 0)
+                {
+                    matrix[bombRow][bombCol - 1] -= bombPower;
+                  //  Console.WriteLine(string.Join(" ", matrix[bombRow ][bombCol - 1]));
+                }
+                if (IsMatrix(bombRow, bombCol + 1, matrix.Length) && matrix[bombRow][bombCol + 1] > 0)
+                {
+                    matrix[bombRow][bombCol + 1] -= bombPower;
+                   // Console.WriteLine(string.Join(" ", matrix[bombRow ][bombCol + 1]));
+                }
+                if (IsMatrix(bombRow + 1, bombCol - 1, matrix.Length) && matrix[bombRow + 1][bombCol - 1] > 0)
+                {
+                    matrix[bombRow + 1][bombCol - 1] -= bombPower;
+                   // Console.WriteLine(string.Join(" ", matrix[bombRow + 1][bombCol - 1]));
+                }
+
+
+                if (IsMatrix(bombRow + 1, bombCol, matrix.Length) && matrix[bombRow + 1][bombCol] >= 0)
+                {
+                    matrix[bombRow + 1][bombCol] -= bombPower;
+                  //  Console.WriteLine(string.Join(" ", matrix[bombRow + 1][bombCol]));
+                }
+                if (IsMatrix(bombRow + 1, bombCol + 1, matrix.Length) && matrix[bombRow + 1][bombCol + 1] >= 0)
+                {
+                    matrix[bombRow + 1][bombCol + 1] -= bombPower;
+                   // Console.WriteLine(string.Join(" ", matrix[bombRow + 1][bombCol + 1]));
+                }
+
+                matrix[bombRow][bombCol] = 0;
+
+
+
+
+
+
+
+
+
+            }
+            int aliveCels = 0;
+            int sum = 0;
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+
+                for (int z = 0; z < matrix.GetLength(0); z++)
+                {
+                    if (matrix[i][z] > 0)
+                    {
+                        sum += matrix[i][z];
+                        aliveCels++;
+                    }
+                }
+
+
+
+
+            }
+            Console.WriteLine($"Alive cells: {aliveCels}");
+            Console.WriteLine($"Sum: {sum}");
+            Console.WriteLine(string.Join(Environment.NewLine, matrix.Select(r => string.Join(" ", r))));
+
+        }
+        private static bool IsMatrix(int row, int col, int length)
+        {
+            return row >= 0 && row < length && col >= 0 && col < length;
+        }
+    }
+}
